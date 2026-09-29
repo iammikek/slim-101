@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8016:8016"
+    environment:
+      APP_ENV: dev
+      DATABASE_PATH: database/database.sqlite
+      JWT_SECRET: docker-dev-secret
+      APP_HOST: 0.0.0.0
+      PORT: "8016"
