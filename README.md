@@ -149,7 +149,7 @@ curl http://127.0.0.1:8016/items/stats/summary
 | Eloquent model | PDO + `Service` classes |
 | `artisan migrate` | `make migrate` (`database/schema.sql`) |
 | `auth` middleware | PSR-15 `JwtAuthMiddleware` |
-| `Validator::make()` | `Support\Validator` |
+| Form Request classes | `Support\Validator` |
 | PHPUnit feature tests | `$app->handle($request)` |
 | Catalog Shop `/shop` | Omitted (API-only) |
 
