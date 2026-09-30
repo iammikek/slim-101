@@ -1,28 +1,28 @@
 # Getting Fast at Slim
 
-A step-by-step **[Slim 4](https://www.slimframework.com/)** port of the *-101 items/categories API — same JSON contract as [framework-x-101](https://github.com/iammikek/framework-x-101) and [laravel-101](https://github.com/iammikek/laravel-101), **API-only** (no `/shop` UI).
+A step-by-step **[Slim 4](https://www.slimframework.com/)** port of [laravel-101](https://github.com/iammikek/laravel-101) for Laravel developers learning Slim. Same items/categories JSON API, JWT auth, pagination, filters, and stats. **API-only** (no `/shop` UI).
 
-**Audience:** PHP developers comparing micro-frameworks: Slim is the classic PSR-7 / PSR-15 path (FastRoute + middleware stack), while Framework X is the ReactPHP twin with a built-in shop.
+**Audience:** You already know routes, Eloquent, migrations, middleware, and validation. Invokable controllers and PHP-DI stand in for Laravel's HTTP layer and container; PDO services stand in for Eloquent; PSR-15 middleware stands in for the HTTP kernel.
 
-**API-only by design:** Other PHP *-101 projects (Laravel, Symfony, Framework X) include a server-rendered `/shop`. Slim has no session/templating story comparable to Blade — this repo focuses on a lean JSON REST API. Pair with [react-101](https://github.com/iammikek/react-101), [vue-101](https://github.com/iammikek/vue-101), or curl.
+**API-only by design:** laravel-101 also includes a Blade shop at `/shop`. Slim has no session/templating story comparable to Blade, so this repo keeps the JSON API. Pair it with [react-101](https://github.com/iammikek/react-101), [vue-101](https://github.com/iammikek/vue-101), or curl.
 
 ---
 
 ## What's Included
 
-1. **Slim 4** — invokable controllers, FastRoute, PSR-15 middleware
-2. **PHP-DI** — constructor injection for services and middleware
-3. **PDO + SQLite** — schema in `database/schema.sql`, no ORM
-4. **`UserService`** — register/login/me, JWT (`firebase/php-jwt`)
-5. **`CategoryService` + `ItemService`** — same business logic as framework-x-101
-6. **Pagination** — `{ items, total, skip, limit }`
-7. **Filtering** — `min_price`, `max_price`, `category_id`, `name_contains`
-8. **Item stats** — `GET /items/stats/summary`
-9. **JWT auth** — Bearer tokens on write endpoints + `/auth/me`
-10. **Exception middleware** — domain errors → JSON `{ detail, code }`
-11. **SQLite locally** — same in Docker (port **8016**)
-12. **Tests** — PHPUnit feature tests (`$app->handle($request)`)
-13. **CI** — GitHub Actions
+1. **Slim 4:** invokable controllers, FastRoute, PSR-15 middleware
+2. **PHP-DI:** constructor injection for services and middleware
+3. **PDO + SQLite:** schema in `database/schema.sql`, no ORM
+4. **`UserService`:** register/login/me, JWT (`firebase/php-jwt`)
+5. **`CategoryService` + `ItemService`:** same business logic as laravel-101
+6. **Pagination:** `{ items, total, skip, limit }`
+7. **Filtering:** `min_price`, `max_price`, `category_id`, `name_contains`
+8. **Item stats:** `GET /items/stats/summary`
+9. **JWT auth:** Bearer tokens on write endpoints + `/auth/me`
+10. **Exception middleware:** domain errors become JSON `{ detail, code }`
+11. **SQLite locally:** same in Docker (port **8016**)
+12. **Tests:** PHPUnit feature tests (`$app->handle($request)`)
+13. **CI:** GitHub Actions
 
 ---
 
@@ -38,8 +38,8 @@ make migrate
 make serve
 ```
 
-Open **http://127.0.0.1:8016/** — hello message  
-**http://127.0.0.1:8016/items** — JSON list
+Open **http://127.0.0.1:8016/** for the hello message.
+**http://127.0.0.1:8016/items** returns the JSON list.
 
 ### Docker (SQLite)
 
@@ -84,17 +84,17 @@ slim-101/
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| GET | `/` | — | Hello message |
-| GET | `/health` | — | Health check |
-| POST | `/auth/register` | — | Register user |
-| POST | `/auth/login` | — | Login (form or JSON) |
+| GET | `/` | No | Hello message |
+| GET | `/health` | No | Health check |
+| POST | `/auth/register` | No | Register user |
+| POST | `/auth/login` | No | Login (form or JSON) |
 | GET | `/auth/me` | JWT | Current user |
-| GET | `/categories` | — | List categories |
-| GET | `/categories/{id}` | — | Show category |
+| GET | `/categories` | No | List categories |
+| GET | `/categories/{id}` | No | Show category |
 | POST/PATCH/DELETE | `/categories` | JWT | Manage categories |
-| GET | `/items` | — | List items (paginated, filterable) |
-| GET | `/items/stats/summary` | — | Item statistics |
-| GET | `/items/{id}` | — | Show item |
+| GET | `/items` | No | List items (paginated, filterable) |
+| GET | `/items/stats/summary` | No | Item statistics |
+| GET | `/items/{id}` | No | Show item |
 | POST/PATCH/DELETE | `/items` | JWT | Manage items |
 
 Write operations require `Authorization: Bearer <token>`.
@@ -142,13 +142,15 @@ curl http://127.0.0.1:8016/items/stats/summary
 
 ## Framework maps
 
-| Laravel / Framework X | Slim 4 (this repo) |
-|-----------------------|--------------------|
-| `routes/api.php` / `$app->get(...)` | `bootstrap/routes.php` |
-| Container / Framework X `Container` | PHP-DI |
-| `auth:api` / JwtAuth callable | PSR-15 `JwtAuthMiddleware` |
-| ReactPHP `Response` | `Slim\Psr7\Response` |
-| `$app($request)` test client | `$app->handle($request)` |
+| Laravel | Slim 4 (this repo) |
+|---------|---------------------|
+| `routes/api.php` | `bootstrap/routes.php` |
+| Service container | PHP-DI |
+| Eloquent model | PDO + `Service` classes |
+| `artisan migrate` | `make migrate` (`database/schema.sql`) |
+| `auth` middleware | PSR-15 `JwtAuthMiddleware` |
+| `Validator::make()` | `Support\Validator` |
+| PHPUnit feature tests | `$app->handle($request)` |
 | Catalog Shop `/shop` | Omitted (API-only) |
 
 ---
